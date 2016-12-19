@@ -3,24 +3,24 @@ from plaid import errors as plaid_errors
 from plaid.utils import json
 
 id_plaid = '584f8ac239361943b6a40c2f'
-id_secret = '584f8ac239361943b6a40c2f'
+id_secret = '2eb94d1cfb298020b6d4c1e396eb75'
 bank_user = 'play_test'
 bank_pass = 'play_good'
 
-client = Client(client_id='id_plaid', secret='id_secret')
+client = Client(client_id=id_plaid, secret=id_secret)
 account_type = 'bofa'
 
 try:
     response = client.connect(account_type, {
-     'username': 'bank_user',
-     'password': 'bank_pass'
+     'username': bank_user,
+     'password': bank_pass
     })
 except plaid_errors.PlaidError, e:
      pass
 else:
     if response.status_code == 200:
         # User connected
-        data = response.json()
+        data = resposnse.json()
     elif response.stat_code == 201:
         # MFA required
         try:
@@ -28,9 +28,10 @@ else:
         except plaid_errors.PlaidError, e:
             pass
         else:
+        	None
             # check for 200 vs 201 responses
             # 201 indicates that additional MFA steps required
-
+            
 
 def answer_mfa(data):
     if data['type'] == 'questions':
@@ -73,10 +74,16 @@ def answer_selections(selections):
     answer = json.dumps(['Yes', 'No'])
     return client.connect_step(account_type, answer)
 
+
+# get accounts
+
+#client = Client(client_id=id_plaid, secret=id_secret, access_token='test_bofa')
+#accounts = client.auth_get().json()
+
 # get transactions
 
-client = Client(client_id='id_plaid', secret='id_secret', access_token='test_bofa')
-response = client.connect_get()
-transactions = response.json()
+#client = Client(client_id=id_plaid, secret=id_secret, access_token='test_bofa')
+#response = client.connect_get()
+#transactions = response.json()
 
-print transactions
+#print transactions
